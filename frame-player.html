@@ -1,0 +1,64 @@
+<html>
+<script src="frame-player.js"></script>
+
+<head>
+    <style>
+        body {background-color: #171717;}
+        header {color: white;}
+        #progressBar {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 512px;
+            height: 20px;
+        }
+    </style>
+</head>
+
+<header>
+    <p>Frame Player (click frame to start)</p>
+</header>
+<hr>
+<br>
+<div id="container">
+    <div>
+        <img id="frameImg" width="512" height="288" onclick='player.imgClick();'></img>
+    </div>
+    <div>
+        <progress id="progressBar" value="0" max="174"></progress>
+    </div>
+</div>
+
+<script>
+    var player = new FramePlayer('container');
+    player.hi();
+
+    player.on('downloadcomplete', function (ms) {
+        console.log('download completed in ' + ms);
+    });
+
+    player.on('play', function (ms) {
+        console.log('video is playing now. current ms: ' + ms);
+    });
+
+    player.on('pause', function (ms) {
+        console.log('video is paused. current ms: ' + ms);
+    });
+
+    player.on('end', function (ms) {
+        console.log('video is completed');
+    });
+
+    player.load();
+
+    document.getElementById('progressBar').addEventListener('click', function (e) {
+        var x = e.pageX - this.offsetLeft,
+        y = e.pageY - this.offsetTop,
+        clickedValue = Math.round(x * this.max / this.offsetWidth);
+    
+        this.value = clickedValue
+        player.barClick(clickedValue)
+    });
+
+</script>
+
+</html>
